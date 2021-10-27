@@ -4,13 +4,20 @@ This app is a working model of a functional banking app that could be utilized t
 
 ## Installation:
 
-1. Create a new folder *{projectFolderName}* 
-2. Clone BadBank, copying the url and using **git clone** *{project url}*  
-3. Next, **cd** *{projectFolderName}*  to move to the project's folder.
-4. Run **npm install** to install it's dependencies. 
-5. After that, **npm start** should start the application for you.
+1. Create a new folder: 
+        *{projectFolderName}* 
+2. Clone BadBank, copying the url provided by the green code button. 
+Using the command line, clone the project using: 
+    **git clone** *{project url}*  
+3. Next move to the project's folder:
+     **cd** *{projectFolderName}*
+4. Install it's dependencies:
+         **npm install**
+5. Start the application:
+          **npm start**
 
 Once started the home screen should look like this: 
+
 
 ![BadBankHomePage](BadBankHomePage.PNG) 
 
@@ -27,13 +34,13 @@ Once started the home screen should look like this:
 
 ### Features:
 
--Authorization and Authentication
--Ability to create and store user accounts
--Deposit and Withdrawal from your saved account
+- Authorization and Authentication
+- Ability to create and store user accounts
+- Deposit and Withdrawal from your saved account
 
 ## License:
 
-Copyright <2021> <Erik Rice>
+Copyright 2021 **Erik Rice**
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
