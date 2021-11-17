@@ -39,36 +39,53 @@ function App() {
     return true;
   };
 
-  const findUserInCtxt = (usersList) => {
-    const currentUser = usersList.find((accountUser) => {
-      if (
-        accountUser.name === name &&
-        accountUser.email === email &&
-        accountUser.password === password
-      ) {
-        return true;
-      }
-      return false;
-    });
-    return currentUser;
-  };
+  // const findUserInCtxt = (accountUsers) => {
+  //   const currentUser = accountUsers.find((accountUser) => {
+  //     return (  accountUser.name === name &&
+  //               accountUser.email === email &&
+  //               accountUser.password === password
+  //     ); 
+  //   });
+  //   return currentUser;
+  // };
 
   //for Login
 
-  const handleLogin = () => {
-    const accountUsers = ctxt.users;
-    const currentUser = findUserInCtxt(accountUsers);
-    if (!checkForUser(currentUser)) {
-      setLoginScreen(false);
-      setStatus(`Welcome ${currentUser.name}!`);
-      loggedInUser(currentUser);
-      setName("");
-      setEmail("");
-      setPassword("");
-    } else {
-      setStatus("Login not recognized");
-      setTimeout(() => setStatus(""), 2500);
-    }
+  const handleLogin = async (user) => {
+    // const accountUsers = ctxt.users;
+    // const currentUser = findUserInCtxt(accountUsers);
+    // if (!checkForUser(currentUser)) {
+    //   setLoginScreen(false);
+    //   setStatus(`Welcome ${currentUser.name}!`);
+    //   loggedInUser(currentUser);
+    //   setName("");
+    //   setEmail("");
+    //   setPassword("");
+    // } else {
+    //   setStatus("Login not recognized");
+    //   setTimeout(() => setStatus(""), 2500);
+    // }
+    fetch(`account/login/${user}`)
+        .then((response) => {
+          if (response.status >= 200 && response.status <= 299) {
+          response.json();
+          } else {
+              throw new Error(response.statusText)
+            }
+        })
+        .then((user) =>{
+          console.log(user);
+          setCtxt(...ctxt.users, ...user);
+          setLoggedIn(user);
+          setName("");
+          setEmail("");
+          setPassword("");
+        })
+        .catch((err) => {
+          console.log(err)
+          alert(err);
+        })
+      
   };
 
   //for Logout

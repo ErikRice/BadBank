@@ -36,20 +36,21 @@ function CreateAccount({
   // if (!validate(email, "You need an email")) return;
   // if (!validate(password, "You need a password")) return;
 
-  const searchForSimilar = (name, email) => {
-    for (const user of ctxt.users) {
-      if (user.name === name && user.email === email) {
-        setStatus(`Error: That name and email combination is taken by another user`)
-        setTimeout(() => setStatus(''), 3000);
-        return true;
-      } else return false;
-    }
-  };
+  // const searchForSimilar = (name, email) => {
+  //   for (const user of ctxt.users) {
+  //     if (user.name === name && user.email === email) {
+  //       setStatus(`Error: That name and email combination is taken by another user`)
+  //       setTimeout(() => setStatus(''), 3000);
+  //       return true;
+  //     } else return false;
+  //   }
+  // };
 
 //adds an account to the ctxt array
 
-  const handleCreate = function () {
-    if (searchForSimilar(name, email)) return;
+  const handleCreate = () => {
+    // if (searchForSimilar(name, email)) return;
+
     if (!name) {alert("You need a name to create an account"); return;}
     if (!email) {alert("You need an email to create an account"); return;}
     if ((password.length) < 8) {
@@ -57,12 +58,44 @@ function CreateAccount({
       setTimeout(() => setStatus(''), 3000); 
       return;
     };
-    ctxt.users.push({ name, email, password, balance: 100 });
-    alert("You succesfully created an account!");
-    setName("");
-    setEmail("");
-    setPassword("");
-    setShow(false);
+    console.log(`userInfo:${name},${email},${password}`);
+  const user = { name, email, password };
+   const url = `http://localhost:3080/account/create/${name}/${email}/${password}`;
+        (async () => {await fetch(url, {
+          method: 'POST', // *GET, POST, PUT, DELETE, etc.
+          mode: 'cors', // no-cors, *cors, same-origin
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'same-origin', // include, *same-origin, omit
+          headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          redirect: 'follow', // manual, *follow, error
+          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+          body: JSON.stringify(user) // body data type must match "Content-Type" header
+        })
+              .then((response) => {
+                  console.log(JSON.stringify(response));
+                  if(response.status === 404) {
+                    throw new Error();
+                  }
+                  response.text();
+                })
+              .then((status) => {
+                  console.log(status);
+                  setShow(false);
+                  ctxt.users.push({ name, email, password, balance: 100 });
+                })
+              .catch((err) => console.log(err))})()
+    
+
+
+    
+    // alert("You succesfully created an account!");
+    // setName("");
+    // setEmail("");
+    // setPassword("");
+    // setShow(false);
   };
   
   return (

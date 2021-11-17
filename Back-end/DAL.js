@@ -1,57 +1,42 @@
-const MongoClient = require('mongodb').client;
-const url         = 'mongodb://localhost:27017';
-let db = null;
+import { MongoClient } from 'mongodb'
+const url           = 'mongodb://localhost:27017/';
+let db;
 
-MongoClient.connect(url, {useUnifiedTopology: true}, function(err, client) {
+
+MongoClient.connect(url, {useUnifiedTopology: true}, (err, client) => {
     if (err) {
-        console.log(err);
+        console.log(`${err}: Couldn't connect to the database`);
     }
+    console.log("Connected to database!")
     db = client.db('mybadbank');
 });
 
-function find(name, email, password) {
-    return new Promise ((resolve, reject) => {
-        db.collection('users')
-            .find({name: name, email: email, password: password}) //balance???
-            .toArray((err, user) => {
-                err ? reject(err) : resolve(user)
-            });
-    });
+export const  findUser = (name, email, password) => {
+    return db.collection('users')
+        .find({name: { $eq: name }, email: { $eq: email }, password: {$eq: password }}) //balance???
+        .toArray();
 };
 
-function create(name, email, password) {
-    return new Promise ((resolve, reject) => {
-        const allUsers = db.collection('users')
-        const doc = {name: name, email: email, password: password, balance: 0};
-        allUsers.insertOne(doc, {w: 1}, function(err, doc) {
-            err ? reject(err) : resolve(doc)
-        });
-    });
+export const create = (name, email, password) => {
+    const user = {name: name, email: email, password: password, balance: 0};
+    return db.collection('users')
+        .insertOne(user, {w: 1})
 };
 
-function update(name, email, password, transaction) {
-    return new Promise ((resolve, reject) => {
-        db.collection('users')
-            .findOneAndUpdate(
-                { name: name, email: email, password: password},                                            //??Questionable??
-                { $inc: {balance: transaction} },
-                { returnOrginal: false },
-                function (err, docs) {
-                    err ? reject(err) : resolve(docs);
-                }
-            );
-    });
+export const update = (name, email, password, transaction) => {
+    return db.collection('users')
+        .findOneAndUpdate(
+            {name: {$eq: name}, email: {$eq: email}, password: {$eq: password}},                                          //??Questionable??
+            { $inc: {balance: transaction} },
+            { returnOrginal: false }
+        );
 };
 
-function allUsers() {
-    return new Promise ((resolve, reject) => {
-        db.collections('users')
-            .find({})
-            .toArray(function(err, docs) {
-                err ? reject(err) : resolve(docs);
-            });
-    });
+export const allUsers = () => {
+    return db.collection('users')
+        .find()
+        .toArray();
 };
 
 
-module.exports(find, create, update, allUsers);
+// export default { findUser, create, update, allUsers};

@@ -21,7 +21,15 @@ function Login({
       body={
         loginScreen ? (
           <>
-            < Form name={name} setName={setName} email={email} setEmail={setEmail} password={password} setPassword={setPassword} setLogin={handleLogin}/>
+            < Form 
+                name={name} 
+                setName={setName} 
+                email={email} 
+                setEmail={setEmail} 
+                password={password} 
+                setPassword={setPassword} 
+                setLogin={handleLogin}
+            />
           </>
         ) : (
           <div className="text-center">
