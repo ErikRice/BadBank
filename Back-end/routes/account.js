@@ -4,7 +4,7 @@ import { createUser, login, changeBalance } from "../Controllers/account.js"
 
 const router = express.Router();
 
-router.post('/create/:name/:email/:password', createUser);
+router.post('/create', createUser);
 
 router.get('/login/:user', login);
 
