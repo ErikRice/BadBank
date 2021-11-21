@@ -10,7 +10,7 @@ function Withdraw({withdraw, setWithdraw, subtractFromAccount, loggedIn, show}) 
       body={
         show ? (
           <>
-            <label id="deposit">{loggedIn.balance ? (`Account Balance $${loggedIn.balance}`) : "You need to login first"}</label>
+            <label id="deposit">{loggedIn._id ? (`Account Balance $${loggedIn.balance}`) : "You need to login first"}</label>
             <input
               type="number"
               id="withdraw"

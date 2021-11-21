@@ -1,4 +1,6 @@
 import express from 'express';
+// import cors from 'cors';
+// import {corsOptions} from '../index.js';
 
 import { createUser, login, changeBalance } from "../Controllers/account.js"
 
@@ -6,8 +8,8 @@ const router = express.Router();
 
 router.post('/create', createUser);
 
-router.get('/login/:user', login);
+router.post('/login', login);
 
-router.put('/update/:user/:transaction', changeBalance);
+router.put('/update', changeBalance);
 
 export default router;

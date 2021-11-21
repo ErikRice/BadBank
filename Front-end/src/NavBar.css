@@ -2,3 +2,9 @@
 .navbar-dark .navbar-nav .nav-item .nav-link:hover {
   color: rgb(236, 234, 109);
 }
+
+#loggedInName {
+  color: white;
+  margin-left: auto; 
+  margin-right: 5% ;
+}

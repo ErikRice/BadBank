@@ -7,7 +7,7 @@ import Withdraw from "./Components/Withdraw.js";
 import AllData from "./Components/AllData.js";
 import { UserContext } from "./Components/Context.js";
 import { useState } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 
 function App() {
@@ -28,6 +28,7 @@ function App() {
 
   function loggedInUser(user) {
     setLoggedIn(user);
+    console.log("loggedInFunc", user)
   }
 
   //callback for handleLogin, addToAccount, and subtractFromAccount to check for an empty object (returns a boolean)
@@ -51,7 +52,7 @@ function App() {
 
   //for Login
 
-  const handleLogin = async (user) => {
+  const handleLogin = (props) => {
     // const accountUsers = ctxt.users;
     // const currentUser = findUserInCtxt(accountUsers);
     // if (!checkForUser(currentUser)) {
@@ -65,28 +66,34 @@ function App() {
     //   setStatus("Login not recognized");
     //   setTimeout(() => setStatus(""), 2500);
     // }
-    fetch(`account/login/${user}`)
-        .then((response) => {
-          if (response.status >= 200 && response.status <= 299) {
-          response.json();
-          } else {
-              throw new Error(response.statusText)
-            }
-        })
-        .then((user) =>{
-          console.log(user);
-          setCtxt(...ctxt.users, ...user);
-          setLoggedIn(user);
-          setName("");
-          setEmail("");
-          setPassword("");
-        })
-        .catch((err) => {
-          console.log(err)
-          alert(err);
-        })
-      
-  };
+    console.log(`props: ${JSON.stringify(props)}`);
+   ( async () => {
+     try{
+      const response = await fetch(`http://localhost:3080/account/login`, {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+        body: JSON.stringify(props)
+      })
+      const user = await response.json();
+      console.log(user);
+      return [
+        setLoggedIn(user.user[0]),
+        setLoginScreen(false)
+      ]
+    } catch(err) {
+      console.log(err);
+    }
+     
+    })()
+  }
+
 
   //for Logout
 
@@ -99,17 +106,17 @@ function App() {
 
   //callback for Account in context addition/subtraction
 
-  const changeAccountCtxt = (user) => {
-    for (const account in ctxt.users) {
-      if (account === user) {
-        user.balance = account.balance;
-        setLoggedIn(user);
-        return user;
-      }
-    }
-    let newUsers = { users: [...ctxt.users] };
-    setCtxt(newUsers);
-  };
+  // const changeAccountCtxt = (user) => {
+  //   for (const account in ctxt.users) {
+  //     if (account === user) {
+  //       user.balance = account.balance;
+  //       setLoggedIn(user);
+  //       return user;
+  //     }
+  //   }
+  //   let newUsers = { users: [...ctxt.users] };
+  //   setCtxt(newUsers);
+  // };
 
   //add to Account
 
@@ -123,16 +130,42 @@ function App() {
       return;
     }
     if (checkForUser(loggedIn)) return;
-    for (const user of ctxt.users) {
-      if (user.name === loggedIn.name) {
-        user.balance += Number(deposit);
-        changeAccountCtxt(user);
-        setShow(false);
-        setTimeout(() => setShow(true), 3000);
-        // alert(`You've successfully submitted $${deposit} into your account`);
-        setDeposit("");
-      }
+    console.log("loggedin",loggedIn._id);
+    console.log("deposit", deposit);
+    let user = {"id": loggedIn._id, "transaction": deposit};
+    (async () => {
+      try { 
+        const response = await fetch(`http://localhost:3080/account/update`,{
+        method: "PUT",
+        mode: "cors",
+        cache: "no-cache",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        credentials: "same-origin",
+        body: JSON.stringify(user)
+      })
+      const updatedUser = await response.json();
+      console.log("updatedUser", updatedUser);
+      return [
+        loggedInUser(updatedUser.user.value),
+        setShow(false),
+        setTimeout(() => setShow(true), 3000),
+        setDeposit("")
+      ]
+    } catch(err) {
+      console.log(err)
     }
+    })()
+
+    // for (const user of ctxt.users) {
+    //   if (user.name === loggedIn.name) {
+    //     user.balance += Number(deposit);
+    //     changeAccountCtxt(user);
+        
+        // alert(`You've successfully submitted $${deposit} into your account`);
+    //   }
+    // }
   };
 
   //subtract from Account
@@ -147,74 +180,87 @@ function App() {
       alert(
         "Overdraft Warning: You have withdrawn more than your account balance!"
       );
+
     if (checkForUser(loggedIn)) return;
-    for (const user of ctxt.users) {
-      if (user.name === loggedIn.name) {
-        user.balance -= Number(withdraw);
-        changeAccountCtxt(user);
-        setShow(false);
-        setTimeout(() => setShow(true), 3000);
-        // alert(`You've successfully withdrawn $${withdraw} from your account`);
-        setWithdraw("");
-      }
+    let user = {"id": loggedIn._id, "transaction": (Number(withdraw) * -1)};
+    (async () => {
+      try { 
+        const response = await fetch(`http://localhost:3080/account/update`,{
+        method: "PUT",
+        mode: "cors",
+        cache: "no-cache",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        credentials: "same-origin",
+        body: JSON.stringify(user)
+      })
+      const updatedUser = await response.json();
+      console.log("updatedUser", updatedUser);
+      return [
+        loggedInUser(updatedUser.user.value),
+        setShow(false),
+        setTimeout(() => setShow(true), 3000),
+        setWithdraw("")
+      ]
+    } catch (err) {
+      console.log(err)
     }
+    })()
+    // for (const user of ctxt.users) {
+    //   if (user.name === loggedIn.name) {
+    //     user.balance -= Number(withdraw);
+    //     changeAccountCtxt(user);
+    //     setShow(false);
+    //     setTimeout(() => setShow(true), 3000);
+    //     // alert(`You've successfully withdrawn $${withdraw} from your account`);
+    //   }
+    // }
   };
 
   return (
-    <Router>
-      <NavBar loginScreen={loginScreen} />
+    <BrowserRouter>
+      <NavBar loginScreen={loginScreen} loggedIn={loggedIn}/>
       <UserContext.Provider value={{ ctxt, setCtxt }}>
-        <Route path="/" exact>
-          <Home />
-        </Route>
-        <Route path="/createaccount/">
-          <CreateAccount
-            name={name}
-            setName={setName}
-            email={email}
-            setEmail={setEmail}
-            password={password}
-            setPassword={setPassword}
-          />
-        </Route>
-        <Route path="/login/">
-          <Login
-            handleLogin={handleLogin}
-            handleLogout={handleLogout}
-            name={name}
-            setName={setName}
-            email={email}
-            setEmail={setEmail}
-            password={password}
-            setPassword={setPassword}
-            status={status}
-            loginScreen={loginScreen}
-            setLoginScreen={setLoginScreen}
-          />
-        </Route>
-        <Route path="/deposit/">
-          <Deposit
-            addToAccount={addToAccount}
-            deposit={deposit}
-            setDeposit={setDeposit}
-            loggedIn={loggedIn}
-            show={show}
-          />
-        </Route>
-        <Route path="/withdraw/">
-          <Withdraw
-            withdraw={withdraw}
-            setWithdraw={setWithdraw}
-            subtractFromAccount={subtractFromAccount}
-            loggedIn={loggedIn}
-            show={show}
-          />
-        </Route>
-        <Route path="/alldata/">
-          <AllData />
-        </Route>
+        <Routes>
+          <Route exact path="/" element={ <Home/> }/>
+          <Route path="/createaccount/" element={ <CreateAccount/> }/>
+          <Route path="/login/" element={
+            <Login
+                handleLogin={handleLogin}
+                handleLogout={handleLogout}
+                name={name}
+                setName={setName}
+                email={email}
+                setEmail={setEmail}
+                password={password}
+                setPassword={setPassword}
+                status={status}
+                loginScreen={loginScreen}
+                setLoginScreen={setLoginScreen}
+              />}/>
+          <Route path="/deposit/" element={
+            <Deposit
+              addToAccount={addToAccount}
+              deposit={deposit}
+              setDeposit={setDeposit}
+              loggedIn={loggedIn}
+              show={show}
+            />
+          }/>
+          <Route path="/withdraw/" element={
+            <Withdraw
+              withdraw={withdraw}
+              setWithdraw={setWithdraw}
+              subtractFromAccount={subtractFromAccount}
+              loggedIn={loggedIn}
+              show={show}
+            />
+          }/>
+          <Route path="/alldata/" element={ <AllData /> }/>
+        </Routes>
       </UserContext.Provider>
-    </Router>
+    </BrowserRouter>
   );
 }
 

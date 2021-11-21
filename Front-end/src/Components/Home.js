@@ -1,5 +1,6 @@
 import Card from './Card.js';
 import Bank from '../bank.png';
+
 function Home() {
   return (
     <div className="text-center">

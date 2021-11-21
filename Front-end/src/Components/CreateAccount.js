@@ -1,18 +1,14 @@
 import { useState, useContext } from "react";
 import Card from "./Card.js";
-import Form from "./Form.js";
 import { UserContext } from "./Context.js";
 
-function CreateAccount({
-  name,
-  setName,
-  email,
-  setEmail,
-  password,
-  setPassword,
-}) {
+function CreateAccount() {
   const [show, setShow] = useState(true);
   const [status, setStatus] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const { ctxt } = useContext(UserContext);
 
   //shows the create account screen
@@ -65,9 +61,8 @@ function CreateAccount({
     }
     console.log(`userInfo:${name},${email},${password}`);
     const user = { name, email, password };
-    const url = `http://localhost:3080/account/create`;
     (async () => {
-      await fetch(url, {
+      await fetch(`http://localhost:3080/account/create`, {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, *cors, same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
@@ -91,6 +86,10 @@ function CreateAccount({
       .then((status) => {
         console.log(status);
         setShow(false);
+        setName("");
+        setEmail("");
+        setPassword("");
+        setShow(false);
         ctxt.users.push({ name, email, password, balance: 100 });
       })
       .catch((err) => {
@@ -98,45 +97,72 @@ function CreateAccount({
       });
 
     // alert("You succesfully created an account!");
-    // setName("");
-    // setEmail("");
-    // setPassword("");
-    // setShow(false);
-  }
-    return (
-      <Card
-        bgcolor="info"
-        header="Create Account"
-        status={status}
-        body={
-          show ? (
-            <Form
-              name={name}
-              setName={setName}
-              email={email}
-              setEmail={setEmail}
-              password={password}
-              setPassword={setPassword}
-              handleCreate={handleCreate}
+   
+  };
+  return (
+    <Card
+      bgcolor="info"
+      header="Create Account"
+      status={status}
+      body={
+        show ? (
+          <>
+            Name
+            <br />
+            <input
+              type="name"
+              className="form-control"
+              id="loginName"
+              placeholder="Enter Account Name..."
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
-          ) : (
-            <div className="text-center">
-              <h5>Success!</h5>
-              <h6>Now you can login with your account.</h6>
-              <br />
-              <button
-                type="submit"
-                className="btn btn-light"
-                onClick={clearForm}
-              >
-                Add Another Account?
-              </button>
-            </div>
-          )
-        }
-      />
-    );
-};
-
+            <br />
+            Email
+            <br />
+            <input
+              type="email"
+              className="form-control"
+              id="loginEmail"
+              placeholder="Enter Account Email..."
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <br />
+            Password
+            <br />
+            <input
+              type="password"
+              className="form-control"
+              id="loginPassword"
+              placeholder="Enter Account Password..."
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <br />
+            <button
+              type="submit"
+              className="btn btn-primary"
+              id="Create Button"
+              onClick={() => handleCreate()}
+              disabled={!name && !email && !password}
+            >
+              Create an Account
+            </button>
+          </>
+        ) : (
+          <div className="text-center">
+            <h5>Success!</h5>
+            <h6>Now you can login with your account.</h6>
+            <br />
+            <button type="submit" className="btn btn-light" onClick={clearForm}>
+              Add Another Account?
+            </button>
+          </div>
+        )
+      }
+    />
+  );
+}
 
 export default CreateAccount;

@@ -19,5 +19,6 @@
   "homepage": "https://github.com/ErikRice/BadBank#readme",
   "devDependencies": {
     "concurrently": "^6.4.0"
-  }
+  },
+  "dependencies": {}
 }
