@@ -1,7 +1,12 @@
-import Card from './Card.js'
+import Card from "./Card.js";
 
-function Withdraw({withdraw, setWithdraw, subtractFromAccount, loggedIn, show}) {
-
+function Withdraw({
+  withdraw,
+  setWithdraw,
+  subtractFromAccount,
+  loggedIn,
+  show,
+}) {
   return (
     <Card
       header="Withdraw"
@@ -10,7 +15,11 @@ function Withdraw({withdraw, setWithdraw, subtractFromAccount, loggedIn, show}) 
       body={
         show ? (
           <>
-            <label id="deposit">{loggedIn._id ? (`Account Balance $${loggedIn.balance}`) : "You need to login first"}</label>
+            <label id="deposit">
+              {loggedIn._id
+                ? `Account Balance $${loggedIn.balance}`
+                : "You need to login first"}
+            </label>
             <input
               type="number"
               id="withdraw"
@@ -37,6 +46,6 @@ function Withdraw({withdraw, setWithdraw, subtractFromAccount, loggedIn, show}) 
       }
     />
   );
-};
+}
 
 export default Withdraw;

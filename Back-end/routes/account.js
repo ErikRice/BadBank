@@ -1,6 +1,4 @@
 import express from 'express';
-// import cors from 'cors';
-// import {corsOptions} from '../index.js';
 
 import { createUser, login, changeBalance } from "../Controllers/account.js"
 

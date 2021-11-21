@@ -31,9 +31,6 @@ export const update = (id, transaction) => {
                 { $inc: {"balance": transaction} },
                 { returnDocument: "after" }
             );
-    // return db.collection('users')
-    //         .find({"_id": new mongo.ObjectId(id) })
-    //         .toArray()
 };
 
 export const allUsers = () => {

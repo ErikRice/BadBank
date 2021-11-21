@@ -16,25 +16,6 @@ export const createUser =  async (req, res) => {
         res.status(500).json({message: "Something went wrong..."});
         console.log(err)
     }
-        
-        
-        
-        // .then(async (user) => {
-        //         } else {
-        //           await create(name, email, password)
-        //                     .then((user) => {
-        //                         console.log(user);
-        //                         res.send(`Thanks for creating an account with us, ${name}!`);
-        //                     })
-        //                     .catch((err)=> {
-        //                         console.log(err);
-        //                         res.send(err)
-        //                     })
-        //             }
-        //         })
-        //         .catch((err) => {
-        //             console.log(err);
-        //         })
 };
 
 export const login = async (req,res) => {
@@ -50,19 +31,6 @@ export const login = async (req,res) => {
         res.status(500).json({message: "Something went wrong..."});
         console.log(err)
     }
-        // if(res.length > 0) {
-        //                 if(res[0].password === password) {
-        //                     console.log("Line 36 user:", typeof(res));
-        //                     const user = JSON.stringify(res[0]);
-        //                     res.send(user);
-        //                 } else {
-        //                     throw 'Login failed: Incorrect password';
-        //                 }
-        //             } throw 'Login failed: User does not exist';
-        // //         })
-        //         .catch((err) => { 
-        //             console.log(err)
-        //         })
 };
 
 export const changeBalance = async (req, res) => {
@@ -74,23 +42,11 @@ export const changeBalance = async (req, res) => {
         const user = await update(id, transaction);
         if (!user.value) return res.status(404).json({message: "User does not exist"});
         res.status(200).json({ user });
-        // next();
         return
     } catch (err) {
         res.status(500).json({message: "Something went wrong..."});
         console.log(err);
     }
-    // console.log(`user: ${userId}`);
-    // await update(userId)
-    //             .then((err, docs) => {
-    //                 if (err) {
-    //                     throw "Couldn't change balance."
-    //                 }
-    //                 res.send(`${docs}`);
-    //             })
-    //             .catch((err) => {
-    //                 console.log(err);
-    //             })
 };
 
 // export const findUpdate = (req,_) => {
