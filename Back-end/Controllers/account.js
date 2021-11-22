@@ -1,5 +1,6 @@
 import { findUser, create, update } from '../DAL.js';
-import express from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 
 export const createUser =  async (req, res) => {
@@ -7,24 +8,27 @@ export const createUser =  async (req, res) => {
     console.log(`reqparams:${name},${email},${password}`);
     try {
         const user = await findUser(name, email, password);
-        if (user.length > 0) return res.status(400).json({message: "User already exists"})       
-        // const hashPassword = await bcrypt.hash(password, 12);
-        const newUser = await create(name, email, password); // : hashPassword
+        if (user.length > 0) return res.status(400).json({message: "User already exists"})
+        const salt = await bcrypt.genSalt()       
+        const hashPassword = await bcrypt.hash(password, salt);
+        await create(name, email, hashPassword); // : hashPassword
         // const token = jwt.sign({email: newUser.email, id: newUser._id}), "test", {expiresIn: "1h"});
-        res.status(200).json({ result: newUser });//add token to this
+        const userData = await findUser(name, email, password);
+        res.status(200).json({ userData });//add token to this
     } catch (err) {
         res.status(500).json({message: "Something went wrong..."});
         console.log(err)
     }
 };
 
-export const login = async (req,res) => {
+export const login = async (req, res) => {
     const {name, email, password} = req.body;
     try { 
-        const user = await findUser(name, email, password);
+        const user = await findUser(name, email);
         if (user === []) return res.status(404).json({message: "User does not exist"});
-    //  const correctPassword = await bcrypt.compare(password, user.password);
-        // if (!correctPassword) return res.status(400).json({message: "Incorrect password"})
+        console.log("password", user)
+        const correctPassword = await bcrypt.compare(password, user[0].password);
+        if (!correctPassword) return res.status(400).json({message: "Incorrect password"})
       //const token = jwt.sign({ email: user.email, id: user._id}, secret ("test" stored in .env file), {expiresIn: "1h"})
         res.status(200).json({ user });//add token to this
     } catch (err) {

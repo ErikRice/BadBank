@@ -12,9 +12,9 @@ MongoClient.connect(url, {useUnifiedTopology: true}, (err, client) => {
     db = client.db('mybadbank');
 });
 
-export const findUser = (name, email, password) => {
+export const findUser = (name, email) => {
     return db.collection('users')
-        .find({name: { $eq: name }, email: { $eq: email }, password: {$eq: password }}) //balance???
+        .find({name: { $eq: name }, email: { $eq: email }}) //balance???
         .toArray();
 };
 
@@ -27,7 +27,7 @@ export const create = (name, email, password) => {
 export const update = (id, transaction) => {
     return db.collection('users')
             .findOneAndUpdate(
-                {"_id": new mongo.ObjectId(id) },                                          //??Questionable??
+                {"_id": new mongo.ObjectId(id) },                       
                 { $inc: {"balance": transaction} },
                 { returnDocument: "after" }
             );
@@ -38,6 +38,3 @@ export const allUsers = () => {
         .find()
         .toArray();
 };
-
-
-// export default { findUser, create, update, allUsers};

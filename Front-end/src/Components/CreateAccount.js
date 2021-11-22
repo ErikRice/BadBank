@@ -62,7 +62,7 @@ function CreateAccount() {
     console.log(`userInfo:${name},${email},${password}`);
     const user = { name, email, password };
     (async () => {
-      await fetch(`http://localhost:3080/account/create`, {
+      const response = await fetch(`http://localhost:3080/account/create`, {
         method: "POST",
         mode: "cors",
         cache: "no-cache", 
@@ -74,6 +74,14 @@ function CreateAccount() {
         referrerPolicy: "no-referrer",
         body: JSON.stringify(user),
       });
+      const result = await response.json();
+      console.log(result)
+      return [
+        setName(""),
+        setEmail(""),
+        setPassword(""),
+        setShow(false),
+      ];
     })()
       .then((response) => {
         console.log(JSON.stringify(response));
@@ -84,11 +92,7 @@ function CreateAccount() {
       })
       .then((status) => {
         console.log(status);
-        setShow(false);
-        setName("");
-        setEmail("");
-        setPassword("");
-        setShow(false);
+    
         ctxt.users.push({ name, email, password, balance: 100 });
       })
       .catch((err) => {
