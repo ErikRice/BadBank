@@ -1,16 +1,20 @@
 import { MongoClient } from 'mongodb'
 import mongo from 'mongodb'
-const url = 'mongodb://localhost:27017/';
-let db;
+import mongoose from 'mongoose'
+const url = `mongodb+srv://${process.env.REACT_APP_DB_NAME}:${process.env.REACT_APP_DB_PASS}@cluster0.q0o69.mongodb.net/mybadbank?retryWrites=true&w=majority`;
+// let db;
 
-
-MongoClient.connect(url, {useUnifiedTopology: true}, (err, client) => {
-    if (err) {
-        console.log(`${err}: Couldn't connect to the database`);
-    }
-    console.log("Connected to database!")
-    db = client.db('mybadbank');
+mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err) => {
+    if (err) return console.log(err);
+    console.log(`Connected to DB!`)
 });
+// MongoClient.connect(url, {useUnifiedTopology: true}, (err, client) => {
+//     if (err) {
+//         console.log(`${err}: Couldn't connect to the database`);
+//     }
+//     console.log("Connected to database!")
+//     // db = client.db('mybadbank');
+// });
 
 export const findUser = (name, email) => {
     return db.collection('users')
