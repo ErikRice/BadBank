@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently \"cd Back-end && npm run dev\" \"cd Front-end && npm start\" "
+    "dev": "concurrently \"cd Back-end && npm run dev\" \"cd Front-end && npm start\" ",
+    "build:local": "env-cmd -f ./.env.production.local npm run build",
+    "build:production": "env-cmd -f ./.env.production npm run build"
   },
   "repository": {
     "type": "git",
@@ -20,5 +22,7 @@
   "devDependencies": {
     "concurrently": "^6.4.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "dotenv": "^10.0.0"
+  }
 }

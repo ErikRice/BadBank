@@ -21,6 +21,7 @@ function App() {
   const [deposit, setDeposit] = useState("");
   const [withdraw, setWithdraw] = useState("");
   const [show, setShow] = useState(true);
+  // const client = useClient();
 
   //set some kind of timeout after certain period of inactivity to log user out?
 
@@ -48,16 +49,13 @@ function App() {
         const response = await fetch(`http://localhost:3080/account/login`, {
           method: "POST",
           mode: "cors",
-          cache: "no-cache",
-          credentials: "same-origin",
           headers: {
             "Content-Type": "application/json",
           },
-          redirect: "follow",
-          referrerPolicy: "no-referrer",
           body: JSON.stringify(props),
         });
         const user = await response.json();
+        // client.setHeaders()
         console.log(user);
         return [setLoggedIn(user.user[0]), setLoginScreen(false)];
       } catch (err) {
@@ -95,11 +93,9 @@ function App() {
         const response = await fetch(`http://localhost:3080/account/update`, {
           method: "PUT",
           mode: "cors",
-          cache: "no-cache",
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: "same-origin",
           body: JSON.stringify(user),
         });
         const updatedUser = await response.json();
@@ -136,11 +132,9 @@ function App() {
         const response = await fetch(`http://localhost:3080/account/update`, {
           method: "PUT",
           mode: "cors",
-          cache: "no-cache",
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: "same-origin",
           body: JSON.stringify(user),
         });
         const updatedUser = await response.json();
