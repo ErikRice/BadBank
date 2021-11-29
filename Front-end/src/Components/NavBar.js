@@ -44,7 +44,7 @@ function Navbar({ loginScreen, loggedIn }) {
             </Link>
           </li>
           <li className="nav-item">
-            {loggedIn._id ? null : (
+            {loggedIn ? null : (
               <Link
                 className="nav-link"
                 to="/createaccount/"
@@ -55,22 +55,27 @@ function Navbar({ loginScreen, loggedIn }) {
             )}
           </li>
           <li className="nav-item">
-            <Link
-              className="nav-link"
-              to="/deposit/"
-              title="While logged in, deposit money to your account"
-            >
-              Deposit
-            </Link>
+            {loggedIn ? (
+                  <Link
+                  className="nav-link"
+                  to="/deposit/"
+                  title="While logged in, deposit money to your account"
+                >
+                  Deposit
+                </Link>
+            ) : null}
+        
           </li>
           <li className="nav-item">
-            <Link
-              className="nav-link"
-              to="/withdraw/"
-              title="While logged in, withdraw money from your account"
-            >
-              Withdraw
-            </Link>
+            {loggedIn ? ( 
+              <Link
+                className="nav-link"
+                to="/withdraw/"
+                title="While logged in, withdraw money from your account"
+              >
+                Withdraw
+              </Link>
+            ) : null}
           </li>
           <li className="nav-item">
             <Link
@@ -83,11 +88,11 @@ function Navbar({ loginScreen, loggedIn }) {
           </li>
         </ul>
       </div>
-      {loggedIn.name && (
+      {loggedIn && (
         <div
           className="navbar-brand"
           id="loggedInName"
-        >{`Welcome, ${loggedIn.name}`}</div>
+        >{`Welcome, ${loggedIn[0].name}`}</div>
       )}
     </nav>
   );

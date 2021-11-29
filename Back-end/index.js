@@ -6,13 +6,14 @@ import router from "./routes/account.js";
 dotenv.config({ path: '../.env'})
 
 const app = express();
+const options = { "origin": "*", "methods": ["POST", "PUT"], "allowedHeaders": ['Content-Type', 'Authorization'] };
 
-app.use(express.json({ limit: "30mb" }));
+app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-app.use(cors({ methods: ["POST", "PUT"], origin: "http://localhost:3000" }));  //heroku URL?
+  //heroku URL?
 
 // app.use(express.static('public'));  // how to set up public in create react app
-app.use("/account", router);
+app.use("/account", cors(options), router);
 
 const Port = 3080;
 

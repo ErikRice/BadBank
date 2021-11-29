@@ -12,7 +12,7 @@ import "./App.css";
 
 function App() {
   const [ctxt, setCtxt] = useState({ users: [] });
-  const [loggedIn, setLoggedIn] = useState({});
+  const [loggedIn, setLoggedIn] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -56,8 +56,8 @@ function App() {
         });
         const user = await response.json();
         // client.setHeaders()
-        console.log(user);
-        return [setLoggedIn(user.user[0]), setLoginScreen(false)];
+        console.log("user res", user.user[0], "token", user.token);
+        return [setLoggedIn([user.user[0], user.token]), setLoginScreen(false)];
       } catch (err) {
         console.log(err);
       }
@@ -85,23 +85,23 @@ function App() {
       return;
     }
     if (checkForUser(loggedIn)) return;
-    console.log("loggedin", loggedIn._id);
+    console.log("loggedin", loggedIn[0]._id);
     console.log("deposit", deposit);
-    let user = { id: loggedIn._id, transaction: deposit };
     (async () => {
       try {
         const response = await fetch(`http://localhost:3080/account/update`, {
           method: "PUT",
           mode: "cors",
           headers: {
-            "Content-Type": "application/json",
+            "Authorization": `Bearer ${loggedIn[1]}`,
+            "Content-Type": "application/json"
           },
-          body: JSON.stringify(user),
+          body: JSON.stringify(deposit),
         });
         const updatedUser = await response.json();
         console.log("updatedUser", updatedUser);
         return [
-          loggedInUser(updatedUser.user.value),
+          loggedInUser(...loggedIn, updatedUser.user.value),
           setShow(false),
           setTimeout(() => setShow(true), 2500),
           setDeposit(""),
@@ -140,7 +140,7 @@ function App() {
         const updatedUser = await response.json();
         console.log("updatedUser", updatedUser);
         return [
-          loggedInUser(updatedUser.user.value),
+          loggedInUser(...loggedIn, updatedUser.user.value),
           setShow(false),
           setTimeout(() => setShow(true), 2500),
           setWithdraw(""),

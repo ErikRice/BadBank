@@ -5,7 +5,6 @@ import jwt from 'jsonwebtoken';
 
 export const createUser =  async (req, res) => {
     const {name, email, password} = req.body;
-    console.log(`reqparams:${name},${email},${password}`);
     try {
         const user = await findUser(name, email, password);
         if (user.length > 0) return res.status(400).json({message: "User already exists"})
@@ -27,9 +26,10 @@ export const login = async (req, res) => {
         const user = await findUser(name, email);
         if (user.length === 0) return res.status(404).json({message: "User does not exist"});
              console.log("user", user)
-        const correctPassword = await bcrypt.compare(password, user[0].password);
+                console.log("userP", user[0].password)
+             const correctPassword = await bcrypt.compare(password, user[0].password);
         if (!correctPassword) return res.status(400).json({message: "Incorrect password"})
-        const token = jwt.sign({ email: user.email, id: user._id}, process.env.REACT_APP_USER_TOKEN_SECRET) //{expiresIn: "1h"}
+        const token = jwt.sign({ email: user[0].email, id: user[0]._id}, process.env.REACT_APP_USER_TOKEN_SECRET) //{expiresIn: "1h"}
               console.log("token:", token);
         res.status(200).json({ user, token });//add token to this
     } catch (err) {
@@ -39,11 +39,14 @@ export const login = async (req, res) => {
 };
 
 export const changeBalance = async (req, res) => {
-    let { id, transaction } = req.body;
-    if (!req.userId) {res.status(404).json({message: "Unauthenticated"})}
-    console.log("changeBalance",req.body);
-    transaction = Number(transaction);
+
     try {
+        if (!req.locals.user.id) {res.status(404).json({message: "Unauthenticated"})}
+        if (req.locals.user.id) {
+            let { id, transaction } = req.locals.user;
+            return {id , transaction}
+        };
+        transaction = Number(transaction);
         console.log("_id:", id, "transaction:", transaction);
         const user = await update(id, transaction);
         if (!user.value) return res.status(404).json({message: "User does not exist"});

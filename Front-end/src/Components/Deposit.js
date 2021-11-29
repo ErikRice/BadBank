@@ -12,8 +12,8 @@ function Deposit({ deposit, setDeposit, addToAccount, loggedIn, show }) {
           show ? (
             <>
               <label id="deposit">
-                {loggedIn._id
-                  ? `Account Balance $${loggedIn.balance}`
+                {loggedIn
+                  ? `Account Balance $${loggedIn[0].balance}`
                   : "You need to login first"}
               </label>
               <input
