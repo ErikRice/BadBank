@@ -29,7 +29,6 @@ function App() {
 
   function loggedInUser(user) {
     setLoggedIn(user);
-    console.log("loggedInFunc", user);
   }
 
   //callback for handleLogin, addToAccount, and subtractFromAccount to check for an empty object (returns a boolean)
@@ -55,8 +54,6 @@ function App() {
           body: JSON.stringify(props),
         });
         const user = await response.json();
-        // client.setHeaders()
-        console.log("user res", user.user[0], "token", user.token);
         return [setLoggedIn([user.user[0], user.token]), setLoginScreen(false)];
       } catch (err) {
         console.log(err);
@@ -73,7 +70,7 @@ function App() {
     setTimeout(() => setStatus(""), 3000);
   };
 
-  //add to Account
+  //Deposit
 
   const addToAccount = () => {
     if (Number(deposit) <= 0) {
@@ -85,8 +82,7 @@ function App() {
       return;
     }
     if (checkForUser(loggedIn)) return;
-    console.log("loggedin", loggedIn[0]._id);
-    console.log("deposit", deposit);
+    let transaction = Number(deposit);
     (async () => {
       try {
         const response = await fetch(`http://localhost:3080/account/update`, {
@@ -96,14 +92,14 @@ function App() {
             "Authorization": `Bearer ${loggedIn[1]}`,
             "Content-Type": "application/json"
           },
-          body: JSON.stringify(deposit),
+          body: JSON.stringify({transaction}),
         });
         const updatedUser = await response.json();
-        console.log("updatedUser", updatedUser);
+        const token = loggedIn[1];
         return [
-          loggedInUser(...loggedIn, updatedUser.user.value),
+          setLoggedIn([updatedUser.user.value, token]),
           setShow(false),
-          setTimeout(() => setShow(true), 2500),
+          setTimeout(() => setShow(true), 2200),
           setDeposit(""),
         ];
       } catch (err) {
@@ -112,7 +108,7 @@ function App() {
     })();
   };
 
-  //subtract from Account
+  //Withdraw
 
   const subtractFromAccount = () => {
     if (Number(withdraw) <= 0) return;
@@ -126,23 +122,24 @@ function App() {
       );
 
     if (checkForUser(loggedIn)) return;
-    let user = { id: loggedIn._id, transaction: Number(withdraw) * -1 };
+    let transaction = (Number(withdraw) * -1 );
     (async () => {
       try {
         const response = await fetch(`http://localhost:3080/account/update`, {
           method: "PUT",
           mode: "cors",
           headers: {
+            "Authorization": `Bearer ${loggedIn[1]}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(user),
+          body: JSON.stringify({transaction}),
         });
         const updatedUser = await response.json();
-        console.log("updatedUser", updatedUser);
+        const token = loggedIn[1];
         return [
-          loggedInUser(...loggedIn, updatedUser.user.value),
+          setLoggedIn([updatedUser.user.value, token]),
           setShow(false),
-          setTimeout(() => setShow(true), 2500),
+          setTimeout(() => setShow(true), 2200),
           setWithdraw(""),
         ];
       } catch (err) {

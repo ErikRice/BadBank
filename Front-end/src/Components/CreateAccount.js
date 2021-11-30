@@ -1,6 +1,5 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import Card from "./Card.js";
-import { UserContext } from "./Context.js";
 
 function CreateAccount() {
   const [show, setShow] = useState(true);
@@ -9,7 +8,7 @@ function CreateAccount() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { ctxt } = useContext(UserContext);
+  // const { ctxt } = useContext(UserContext);
 
   //shows the create account screen
 
@@ -59,7 +58,6 @@ function CreateAccount() {
       setTimeout(() => setStatus(""), 3000);
       return;
     }
-    console.log(`userInfo:${name},${email},${password}`);
     const user = { name, email, password };
     (async () => {
       const response = await fetch(`http://localhost:3080/account/create`, {
@@ -84,7 +82,6 @@ function CreateAccount() {
       ];
     })()
       .then((response) => {
-        console.log(JSON.stringify(response));
         if (response.status === 404) {
           throw new Error();
         }
@@ -92,8 +89,6 @@ function CreateAccount() {
       })
       .then((status) => {
         console.log(status);
-    
-        ctxt.users.push({ name, email, password, balance: 100 });
       })
       .catch((err) => {
         console.log(err.status);

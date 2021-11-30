@@ -7,8 +7,10 @@ dotenv.config({ path: '../../.env'})
 // }
 const userAuth = async (req, res, next) => {
     try{
-        res.header({"Access-Control-Allow-Origin": "http://localhost:3000"})
-        const token = req.headers.authorization.split(' ')[1];
+        // res.setHeader("Access-Control-Allow-Origin", "*");
+        // res.header("Access-Control-Allow-Headers");
+        let token = req.header("Authorization");
+        token = token.split(' ')[1];
         const isCustomUser = token.length < 500;     // differentiate between Google Auth token
         // let decodedData = await jwt.verify(token, process.env.REACT_APP_USER_TOKEN_SECRET);
         //     console.log("decoded",decodedData);
@@ -19,9 +21,8 @@ const userAuth = async (req, res, next) => {
         let decodedData;
         if (token && isCustomUser) {
                 decodedData = await jwt.verify(token, process.env.REACT_APP_USER_TOKEN_SECRET);
-                console.log("decoded",decodedData);
-                if (error) return res.sendStatus(403);
-                res.locals.user = { id: decodedData?.id, transaction: transaction };
+                // if (error) return res.sendStatus(403);
+                req.user = { "id": decodedData.id, "transaction": transaction.transaction };
                 next();
          
             // 
@@ -31,9 +32,9 @@ const userAuth = async (req, res, next) => {
         //     req.userId = decodedData?.sub;
         // }
         // next();
-    } catch (error) {
-        console.log(error.message);
-        return res.sendStatus(401)
+    } catch (e) {
+        console.log(e);
+        return res.sendStatus(401);
     }
 }
 

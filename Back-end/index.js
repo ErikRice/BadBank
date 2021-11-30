@@ -6,7 +6,7 @@ import router from "./routes/account.js";
 dotenv.config({ path: '../.env'})
 
 const app = express();
-const options = { "origin": "*", "methods": ["POST", "PUT"], "allowedHeaders": ['Content-Type', 'Authorization'] };
+const options = { origin: "http://localhost:3000", methods: ["POST", "PUT"], allowedHeaders: ['Content-Type', 'Authorization'] };
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));

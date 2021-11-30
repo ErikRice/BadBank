@@ -88,12 +88,12 @@ function Navbar({ loginScreen, loggedIn }) {
           </li>
         </ul>
       </div>
-      {loggedIn && (
+      {loggedIn ? (
         <div
           className="navbar-brand"
           id="loggedInName"
         >{`Welcome, ${loggedIn[0].name}`}</div>
-      )}
+      ) : null}
     </nav>
   );
 }

@@ -3,6 +3,9 @@
   color: rgb(236, 234, 109);
 }
 
+.navbar-brand {
+  text-shadow:2px 2px rgb(0, 0, 0);
+}
 #loggedInName {
   color: white;
   margin-left: auto; 
