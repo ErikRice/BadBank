@@ -4,7 +4,10 @@ import jwt from 'jsonwebtoken';
 
 
 export const createUser =  async (req, res) => {
-    const {name, email, password} = req.body;
+    let {name, email, password} = req.body;
+    name = name.trim();
+    email = email.trim();
+    password = password.trim();
     try {
         const user = await findUser(name, email, password);
         if (user.length > 0) return res.status(400).json({message: "User already exists"})
@@ -21,7 +24,10 @@ export const createUser =  async (req, res) => {
 };
 
 export const login = async (req, res) => {
-    const {name, email, password} = req.body;
+    let {name, email, password} = req.body;
+    name = name.trim();
+    email = email.trim();
+    password = password.trim();
     try { 
         const user = await findUser(name, email);
         if (user.length === 0) return res.status(404).json({message: "User does not exist"});
