@@ -15,7 +15,11 @@ app.use(express.urlencoded({extended: true}));
 // app.use(express.static('public'));  // how to set up public in create react app
 app.use("/account", cors(options), router);
 
-const Port = 3080;
+const Port = process.env.PORT || 3080;
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('Front-end/build'));
+}
 
 app.listen(Port, (err) => {
   if (err) {

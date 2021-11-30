@@ -4,10 +4,12 @@
   "description": "This app is a working model of a functional banking app that could be utilized to create an account that stores a balance of fake currency. The site allows a user to create their account, login, deposit or withdraw \"money\", and logout.",
   "main": "index.js",
   "scripts": {
+    "client-install": "npm install --prefix Front-end",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "concurrently \"cd Back-end && npm run dev\" \"cd Front-end && npm start\" ",
     "build:local": "env-cmd -f ./.env.production.local npm run build",
-    "build:production": "env-cmd -f ./.env.production npm run build"
+    "build:production": "env-cmd -f ./.env.production npm run build",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix Front-end && npm run build --prefix Front-end"
   },
   "repository": {
     "type": "git",
