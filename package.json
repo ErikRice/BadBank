@@ -9,7 +9,7 @@
     "server": "nodemon index.js",
     "build": "cd Front-end && npm run build",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run Front-end\"",
-    "start": "node server.js",
+    "start": "node index.js",
     "heroku-postbuild": "cd Front-end && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "author": "",
