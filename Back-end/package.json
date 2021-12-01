@@ -5,10 +5,12 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix Front-end && npm run build --prefix Front-end"
+    "Front-end": "cd Front-end && npm run start",
+    "server": "nodemon server.js",
+    "build": "cd Front-end && npm run build",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run Front-end\"",
+    "start": "node server.js",
+    "heroku-postbuild": "cd Front-end && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "author": "",
   "license": "ISC",
