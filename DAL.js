@@ -4,12 +4,13 @@ import dotenv from 'dotenv'
 dotenv.config({ path: '.env'})
 let db;
 
-MongoClient.connect(process.env.MONGOLAB_URI || process.env.REACT_APP_MONGODB_URI, {useUnifiedTopology: true}, (err, client) => {
+MongoClient.connect(process.env.MONGOLAB_URI, {useUnifiedTopology: true}, (err, client) => {
     if (err) {
         console.log(`${err}: Couldn't connect to the database`);
     }
     console.log("Connected to database!")
-    return db = client.db('mybadbank');
+    db = client.db('mybadbank');
+    return db;
 });
 
 export const findUser = (name, email) => {
