@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "Front-end": "cd Front-end && npm run start",
-    "server": "nodemon server.js",
+    "server": "nodemon index.js",
     "build": "cd Front-end && npm run build",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run Front-end\"",
     "start": "node server.js",
