@@ -19,6 +19,9 @@ const Port = process.env.PORT || 3080;
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('Front-end/build'));
+  app.get('*', (_, res) => {
+    res.sendFile(path.resolve(_dirname, 'Front-end', 'build', 'index.html'));
+  })
 }
 
 app.listen(Port, (err) => {
