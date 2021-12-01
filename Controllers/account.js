@@ -11,9 +11,8 @@ export const createUser =  async (req, res) => {
         const salt = await bcrypt.genSalt()       
         const hashPassword = await bcrypt.hash(password, salt);
         await create(name, email, hashPassword);
-        // const token = jwt.sign({email: newUser.email, id: newUser._id}, process.env.REACT_APP_USER_TOKEN_SECRET, {expiresIn: "1h"})
         const userData = await findUser(name, email, password);
-        res.status(200).json({ userData });//add token to this
+        res.status(200).json({ userData });
     } catch (err) {
         res.status(500).json({message: "Something went wrong..."});
         console.log(err)

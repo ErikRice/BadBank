@@ -60,7 +60,7 @@ function CreateAccount() {
     }
     const user = { name, email, password };
     (async () => {
-      const response = await fetch(`http://localhost:3080/account/create`, {
+      const response = await fetch("/account/create", {
         method: "POST",
         mode: "cors",
         cache: "no-cache", 
