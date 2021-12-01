@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 dotenv.config({ path: '.env'})
 let db;
 
-MongoClient.connect(process.env.MONGODB_URI || process.env.REACT_APP_MONGODB_URI, {useUnifiedTopology: true}, (err, client) => {
+MongoClient.connect(process.env.MONGOLAB_URI || process.env.REACT_APP_MONGODB_URI, {useUnifiedTopology: true}, (err, client) => {
     if (err) {
         console.log(`${err}: Couldn't connect to the database`);
     }
