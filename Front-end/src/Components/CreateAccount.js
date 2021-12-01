@@ -46,11 +46,13 @@ function CreateAccount() {
     // if (searchForSimilar(name, email)) return;
 
     if (!name) {
-      alert("You need a name to create an account");
+      setStatus("You need a name to create an account");
+      setTimeout(() => setStatus(''), 3000);
       return;
     }
     if (!email) {
-      alert("You need an email to create an account");
+      setStatus("You need an email to create an account");
+      setTimeout(()=> setStatus(''), 3000);
       return;
     }
     if (password.length < 8) {
@@ -60,39 +62,27 @@ function CreateAccount() {
     }
     const user = { name, email, password };
     (async () => {
+      try {
       const response = await fetch("/account/create", {
         method: "POST",
         mode: "cors",
-        cache: "no-cache", 
-        credentials: "same-origin",
         headers: {
           "Content-Type": "application/json",
         },
-        redirect: "follow",
-        referrerPolicy: "no-referrer",
         body: JSON.stringify(user),
       });
-      const result = await response.json();
-      console.log(result)
+      const  newUser = await response.json();
       return [
         setName(""),
         setEmail(""),
         setPassword(""),
+        setStatus(newUser.user.name),
         setShow(false),
       ];
-    })()
-      .then((response) => {
-        if (response.status === 404) {
-          throw new Error();
-        }
-        response.json();
-      })
-      .then((status) => {
-        console.log(status);
-      })
-      .catch((err) => {
-        console.log(err.status);
-      });
+    } catch (err) {
+      console.log(err);
+    }
+    })() 
   };
   return (
     <Card
@@ -148,7 +138,7 @@ function CreateAccount() {
         ) : (
           <div className="text-center">
             <h5>Success!</h5>
-            <h6>Now you can login with your account.</h6>
+            <h6>Now you can login with your account, {status}.</h6>
             <br />
             <button type="submit" className="btn btn-light" onClick={clearForm}>
               Add Another Account?
