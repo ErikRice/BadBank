@@ -9,8 +9,8 @@
     "dev": "concurrently \"cd Back-end && npm run dev\" \"cd Front-end && npm start\" ",
     "start": "concurrently \"cd Back-end && npm run dev\" \"cd Front-end && npm start\"",
     "build:local": "env-cmd -f ./.env.production.local npm run build",
-    "build:production": "env-cmd -f ./.env.production npm run build",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix Front-end && npm run build --prefix Front-end"
+    "build:production": "env-cmd -f ./.env.production npm run build"
+    
   },
   "repository": {
     "type": "git",
