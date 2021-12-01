@@ -2,6 +2,7 @@ import dotenv from 'dotenv'
 import express from "express";
 import cors from "cors";
 import router from "./routes/account.js";
+import path from 'path';
 
 
 dotenv.config({ path: '.env'})
