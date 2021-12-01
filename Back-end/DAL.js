@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb'
 import mongo from 'mongodb'
 import dotenv from 'dotenv'
-dotenv.config({ path: '../.env'})
+dotenv.config({ path: '.env'})
 let db;
 
 MongoClient.connect(process.env.MONGODB_URI || process.env.REACT_APP_MONGODB_URI, {useUnifiedTopology: true}, (err, client) => {
