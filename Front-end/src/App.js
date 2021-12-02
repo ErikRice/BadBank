@@ -75,7 +75,7 @@ function App() {
     }
     (async () => {
       try {
-        const response = await fetch("http://localhost:3080/account/login", {
+        const response = await fetch("/account/login", {
           method: "POST",
           mode: "cors",
           headers: {
@@ -120,7 +120,7 @@ function App() {
     let transaction = Number(deposit);
     (async () => {
       try {
-        const response = await fetch("http://localhost:3080/account/update", {
+        const response = await fetch("/account/update", {
           method: "PUT",
           mode: "cors",
           headers: {
@@ -165,7 +165,7 @@ function App() {
     let transaction = Number(withdraw) * -1;
     (async () => {
       try {
-        const response = await fetch("http://localhost:3080/account/update", {
+        const response = await fetch("/account/update", {
           method: "PUT",
           mode: "cors",
           headers: {
