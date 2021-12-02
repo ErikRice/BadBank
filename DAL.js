@@ -15,7 +15,7 @@ MongoClient.connect(process.env.REACT_APP_MONGODB_URI || process.env.MONGOLAB_UR
 
 export const findUser = (name, email) => {
     return db.collection('users')
-        .find({name: { $eq: name }, email: { $eq: email }}) //balance???
+        .find({name: { $eq: name }, email: { $eq: email }})
         .toArray();
 };
 

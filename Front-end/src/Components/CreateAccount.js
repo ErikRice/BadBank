@@ -7,38 +7,13 @@ function CreateAccount() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  // const { ctxt } = useContext(UserContext);
+  const [newUserName, setNewUserName] = useState("");
 
   //shows the create account screen
 
   const clearForm = () => {
     setShow(true);
   };
-
-  //validates account info and sends error if missing info (for now I am using alerts)
-
-  // const validate = (field, label) => {
-  //   if (!field) {
-  //     setStatus("Error: " + label);
-  //     setTimeout(() => setStatus(''), 3000);
-  //     return false;
-  //   }
-  //   return true;
-  // // };
-  // if (!validate(name, "You need a name")) return;
-  // if (!validate(email, "You need an email")) return;
-  // if (!validate(password, "You need a password")) return;
-
-  // const searchForSimilar = (name, email) => {
-  //   for (const user of ctxt.users) {
-  //     if (user.name === name && user.email === email) {
-  //       setStatus(`Error: That name and email combination is taken by another user`)
-  //       setTimeout(() => setStatus(''), 3000);
-  //       return true;
-  //     } else return false;
-  //   }
-  // };
 
   //adds an account to the ctxt array
 
@@ -63,7 +38,7 @@ function CreateAccount() {
     const user = { name, email, password };
     (async () => {
       try {
-      const response = await fetch("/account/create", {
+      const response = await fetch("http://localhost:3080/account/create", {
         method: "POST",
         mode: "cors",
         headers: {
@@ -72,11 +47,13 @@ function CreateAccount() {
         body: JSON.stringify(user),
       });
       const  newUser = await response.json();
+      if (user.message) {setStatus(user.message); setTimeout(() => setStatus(""), 3000)}
+      console.log(newUser);
       return [
         setName(""),
         setEmail(""),
         setPassword(""),
-        setStatus(newUser.user.name),
+        setNewUserName(newUser.userData[0].name),
         setShow(false),
       ];
     } catch (err) {
@@ -88,7 +65,6 @@ function CreateAccount() {
     <Card
       bgcolor="info"
       header="Create Account"
-      status={status}
       body={
         show ? (
           <>
@@ -124,6 +100,7 @@ function CreateAccount() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            <h6 id="error">{status}</h6>
             <br />
             <button
               type="submit"
@@ -138,7 +115,7 @@ function CreateAccount() {
         ) : (
           <div className="text-center">
             <h5>Success!</h5>
-            <h6>Now you can login with your account, {status}.</h6>
+            <h6> Welcome, {newUserName}. Now you can login with your account.</h6>
             <br />
             <button type="submit" className="btn btn-light" onClick={clearForm}>
               Add Another Account?

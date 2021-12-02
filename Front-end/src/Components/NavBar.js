@@ -4,30 +4,29 @@ import Bank from "../bank.png";
 
 function Navbar({ loginScreen, loggedIn }) {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-secondary">
+    <nav className="navbar shadow-sm navbar-expand-lg navbar-dark d-flex p-3 bd-highlight">
       <div className="navbar-brand">
         <img
           src={Bank}
           alt="bank-logo"
-          width="22"
-          height="24"
-          className="d-inline-block align-text-top"
-          style={{ marginRight: ".5em", marginLeft: ".5em" }}
+          width="40"
+          height="40"
+          className="d-inline-flex mx-3"
         />
-        Bad Bank
+        <span id="bank-text">Bad Bank</span>
       </div>
       <button
-        className="navbar-toggler"
+        className="navbar-toggler collapsed"
         type="button"
-        data-toggle="collapse"
-        data-target="#navbarNav"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
         aria-controls="navbarNav"
         aria-expanded="false"
         aria-label="Toggle navigation"
       >
         <span className="navbar-toggler-icon"></span>
       </button>
-      <div className="collapse navbar-collapse" id="navbarNav">
+      <div className="navbar-collapse collapse" id="navbarNav">
         <ul className="navbar-nav">
           <li className="nav-item">
             <Link className="nav-link" to="/" title="Homepage for Bad Bank">
@@ -37,7 +36,7 @@ function Navbar({ loginScreen, loggedIn }) {
           <li className="nav-item">
             <Link
               className="nav-link"
-              to="/login/"
+              to="/login"
               title="Login to access your account"
             >
               {loginScreen ? "Login" : "Logout"}
@@ -47,7 +46,7 @@ function Navbar({ loginScreen, loggedIn }) {
             {loggedIn ? null : (
               <Link
                 className="nav-link"
-                to="/createaccount/"
+                to="/createaccount"
                 title="Create an account"
               >
                 Create Account
@@ -58,7 +57,7 @@ function Navbar({ loginScreen, loggedIn }) {
             {loggedIn ? (
                   <Link
                   className="nav-link"
-                  to="/deposit/"
+                  to="/deposit"
                   title="While logged in, deposit money to your account"
                 >
                   Deposit
@@ -70,7 +69,7 @@ function Navbar({ loginScreen, loggedIn }) {
             {loggedIn ? ( 
               <Link
                 className="nav-link"
-                to="/withdraw/"
+                to="/withdraw"
                 title="While logged in, withdraw money from your account"
               >
                 Withdraw
@@ -78,13 +77,15 @@ function Navbar({ loginScreen, loggedIn }) {
             ) : null}
           </li>
           <li className="nav-item">
+          {loggedIn ? (
             <Link
               className="nav-link"
-              to="/alldata/"
+              to="/sessionData"
               title="All existing users and their information"
             >
-              AllData
+              Session Data
             </Link>
+            ) : null}
           </li>
         </ul>
       </div>

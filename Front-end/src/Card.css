@@ -1,0 +1,20 @@
+#card {
+    margin: auto;
+    margin-top: 10%;
+    max-width: 22em; 
+    border-radius: 1%;
+    border: solid 1px  rgba(9, 35, 105, 0.616);
+    align-content: center;
+    background-color: var(--bs-cyan);
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+
+.card-header {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    font-stretch: wider;
+    text-align: center;
+    margin: 4% 0 4% 0;
+    align-content: center;
+  }

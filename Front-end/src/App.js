@@ -4,14 +4,14 @@ import CreateAccount from "./Components/CreateAccount.js";
 import Login from "./Components/Login.js";
 import Deposit from "./Components/Deposit.js";
 import Withdraw from "./Components/Withdraw.js";
-import AllData from "./Components/AllData.js";
+import SessionData from "./Components/SessionData.js";
 import { UserContext } from "./Components/Context.js";
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 
 function App() {
-  const [ctxt, setCtxt] = useState({ users: [] });
+  const [ctxt, setCtxt] = useState([]);
   const [loggedIn, setLoggedIn] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -21,7 +21,6 @@ function App() {
   const [deposit, setDeposit] = useState("");
   const [withdraw, setWithdraw] = useState("");
   const [show, setShow] = useState(true);
-  // const client = useClient();
 
   //set some kind of timeout after certain period of inactivity to log user out?
 
@@ -40,20 +39,55 @@ function App() {
     return true;
   };
 
+  const ctxtCreate = (user, transaction, string) => {
+    const { name, balance } = user;
+    let time = String(new Date());
+    time = time.split(" ");
+    time = String(time.splice(1, 4)).replace(/,/g, ' ')
+    console.log(time);
+    let session = {
+      name: name,
+      time: time,
+      type: string,
+      transaction: Number(transaction),
+      balance: balance,
+    };
+    setCtxt([...ctxt, session]);
+  };
+
   //for Login
 
-  const handleLogin = (props) => {
+  const handleLogin = ({ name, email, password }) => {
+    if (!name) {
+      setStatus("You need a name");
+      setTimeout(() => setStatus(""), 3000);
+      return;
+    }
+    if (!email) {
+      setStatus("You need an email");
+      setTimeout(() => setStatus(""), 3000);
+      return;
+    }
+    if (!password) {
+      setStatus("You need a password");
+      setTimeout(() => setStatus(""), 3000);
+      return;
+    }
     (async () => {
       try {
-        const response = await fetch("/account/login", {
+        const response = await fetch("http://localhost:3080/account/login", {
           method: "POST",
           mode: "cors",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(props),
+          body: JSON.stringify({ name, email, password }),
         });
         const user = await response.json();
+        if (user.message) {
+          setStatus(user.message);
+          setTimeout(() => setStatus(""), 3000);
+        }
         return [setLoggedIn([user.user[0], user.token]), setLoginScreen(false)];
       } catch (err) {
         console.log(err);
@@ -66,6 +100,7 @@ function App() {
   const handleLogout = () => {
     setLoginScreen(true);
     loggedInUser("");
+    setCtxt([]);
     setStatus("You've successfully logged out");
     setTimeout(() => setStatus(""), 3000);
   };
@@ -85,17 +120,22 @@ function App() {
     let transaction = Number(deposit);
     (async () => {
       try {
-        const response = await fetch("/account/update", {
+        const response = await fetch("http://localhost:3080/account/update", {
           method: "PUT",
           mode: "cors",
           headers: {
-            "Authorization": `Bearer ${loggedIn[1]}`,
-            "Content-Type": "application/json"
+            Authorization: `Bearer ${loggedIn[1]}`,
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify({transaction}),
+          body: JSON.stringify({ transaction }),
         });
         const updatedUser = await response.json();
         const token = loggedIn[1];
+        ctxtCreate(updatedUser.user.value, deposit, "deposit");
+        if (updatedUser.message) {
+          setStatus(updatedUser.message);
+          setTimeout(() => setStatus(""), 3000);
+        }
         return [
           setLoggedIn([updatedUser.user.value, token]),
           setShow(false),
@@ -122,20 +162,26 @@ function App() {
       );
 
     if (checkForUser(loggedIn)) return;
-    let transaction = (Number(withdraw) * -1 );
+    let transaction = Number(withdraw) * -1;
     (async () => {
       try {
-        const response = await fetch("/account/update", {
+        const response = await fetch("http://localhost:3080/account/update", {
           method: "PUT",
           mode: "cors",
           headers: {
-            "Authorization": `Bearer ${loggedIn[1]}`,
+            Authorization: `Bearer ${loggedIn[1]}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({transaction}),
+          body: JSON.stringify({ transaction }),
         });
         const updatedUser = await response.json();
+        if (updatedUser.message) {
+          setStatus(updatedUser.message);
+          setTimeout(() => setStatus(""), 3000);
+        }
         const token = loggedIn[1];
+        ctxtCreate(updatedUser.user.value, withdraw, "withdraw");
+
         return [
           setLoggedIn([updatedUser.user.value, token]),
           setShow(false),
@@ -197,7 +243,7 @@ function App() {
               />
             }
           />
-          <Route path="/alldata" element={<AllData />} />
+          <Route path="/sessionData" element={<SessionData ctxt={ctxt} />} />
         </Routes>
       </UserContext.Provider>
     </BrowserRouter>

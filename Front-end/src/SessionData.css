@@ -1,0 +1,18 @@
+@media (max-width: 450px) {
+    #row {
+      max-width: 2rem;
+
+    }
+  }
+
+#row {
+    margin: auto;
+    margin-top: 10%;
+}
+
+.row .table {
+    max-width: 20rem;
+    vertical-align: center;
+    background-color: rgba(90, 107, 107, 0.883);
+    color: white;
+}

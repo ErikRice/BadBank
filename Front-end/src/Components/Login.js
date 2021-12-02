@@ -1,6 +1,7 @@
 import Card from './Card.js';
 import { useState } from 'react';
 
+
 function Login({
   handleLogin,
   handleLogout,
@@ -15,7 +16,6 @@ function Login({
   return (
     <Card
       header="Account Login"
-      bgcolor="info"
       body={
         loginScreen ? (
           <>
@@ -51,6 +51,7 @@ function Login({
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        <h6 id="error">{status}</h6>
         <br />
           <button
             type="submit"

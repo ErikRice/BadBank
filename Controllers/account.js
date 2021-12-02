@@ -37,7 +37,7 @@ export const login = async (req, res) => {
 export const changeBalance = async (req, res) => {
 
     try {
-        // if (!req.user.id) {res.status(404).json({message: "Unauthenticated"})}
+            if (!req.user.id) {res.status(404).json({message: "Unauthenticated"})}
         // if (req.user.id) {
             let id = req.user.id;
             let transaction = req.user.transaction;

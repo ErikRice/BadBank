@@ -1,13 +1,32 @@
 .navbar-dark .navbar-nav .nav-item .nav-link:focus,
 .navbar-dark .navbar-nav .nav-item .nav-link:hover {
-  color: rgb(236, 234, 109);
+  color: rgb(255, 255, 255);
+}
+
+.nav-item {
+  font-weight: lighter;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .navbar-brand {
-  text-shadow:2px 2px rgb(0, 0, 0);
+  text-align: center;
+  margin: 0
 }
+
+#bank-text {
+  font-family: Arial, Helvetica, sans-serif;
+  text-shadow:2px 2px rgb(0, 0, 0);
+  display: inline-flex;
+}
+
 #loggedInName {
+  font-family: Arial, Helvetica, sans-serif;
   color: white;
   margin-left: auto; 
   margin-right: 5% ;
+}
+
+.bd-highlight {
+  background-color: rgba(30, 173, 216, 0.691);
+  border: 1.75px solid rgba(0, 0, 0, 0.287);
 }

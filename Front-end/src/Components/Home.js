@@ -14,7 +14,8 @@ function Home() {
             src={Bank}
             className="img-fluid"
             alt="Bank Building"
-            style={{ width: "60", height: "70" }}
+            width="150" 
+            height="150" 
           />
         }
       />
