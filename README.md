@@ -1,6 +1,6 @@
 # Bad Bank App
 
-This app is a working model of a functional banking app that could be utilized to create an account that stores a balance of fake currency. The site allows a user to create their account, login, deposit or withdraw "money", and logout.   
+This is a model of a banking app that has the ability to authenticate/authorize users who create an account and login.  The app is meant to create fake users as it is not fully secured. The site allows a user to create their account, login, deposit or withdraw "money", and logout. A user is only authorized to deposit/withdraw "money" from their balance so long as they have the required token, which they receive during login. While logged in, your session of transactions are saved and displayed on the session data page until you decide to logout at which the session data is cleared.     
 
 ## Installation:
 
@@ -14,7 +14,7 @@ Using the command line, clone the project using:
 4. Install it's dependencies:
          **npm install**
 5. Start the application:
-          **npm start**
+          **npm run dev**
 
 Once started the home screen should look like this: 
 
@@ -23,20 +23,23 @@ Once started the home screen should look like this:
 
 ## Tech-Stack
 
-|            Front-End             |    Back-End      |
-| -------------------------------- | :-------------:  |
-|  bootstrap:^5.1.0                | cors: ^2.8.5     |
-|  react: ^17.0.2                  | express: ^4.17.1 |
-|  react-bootstrap: ^2.0.0-beta.5  | mongodb: ^4.1.3  |
-|  react-dom: ^17.0.2              |                  |
-|  react-router-dom: ^5.2.0        |                  |
-|  react-scripts: ^4.0.3           |                  |
+|            Front-End             |           Back-End           |
+| -------------------------------- | :--------------------------: |
+|  bootstrap:^5.1.0                | cors: ^2.8.5                 |
+|  react: ^17.0.2                  | express: ^4.17.1             |
+|  react-bootstrap: ^2.0.0-beta.5  | mongodb: ^4.1.3              |
+|  react-dom: ^17.0.2              | bcryptjs: ^2.4.3             |
+|  react-router-dom: ^5.2.0        | jsonwebtoken: ^8.5.1         | 
+|  react-scripts: ^4.0.3           | @auth0/auth0-react: ^1.8.0   |
+|                                  | body-parser: ^1.19.0         |
 
 ### Features:
 
 - Authorization and Authentication
 - Ability to create and store user accounts
-- Deposit and Withdrawal from your saved account
+- Deposit and Withdrawal from your account balance
+- User session history of transactions
+- Logout clears session history and saves user balance
 
 ## License:
 

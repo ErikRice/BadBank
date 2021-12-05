@@ -102,7 +102,7 @@ function App() {
     }
     (async () => {
       try {
-        const response = await fetch("http://localhost:3080/account/login", {
+        const response = await fetch("/account/login", {
           method: "POST",
           mode: "cors",
           headers: {

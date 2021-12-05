@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import "../SessionData.css";
 
 function SessionData({ ctxt }) {

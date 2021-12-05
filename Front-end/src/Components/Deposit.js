@@ -1,6 +1,4 @@
-// import { UserContext } from './Context.js'
 import Card from "./Card.js";
-// import { useState } from 'react';
 
 function Deposit({ deposit, setDeposit, addToAccount, loggedIn, show }) {
   return (

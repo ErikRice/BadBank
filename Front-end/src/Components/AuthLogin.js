@@ -1,6 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import '../AuthLogin.css';
 import { Button } from 'react-bootstrap';
+import '../AuthLogin.css';
 
 const LoginButton = (props) => {
   const { loginWithRedirect } = useAuth0();
