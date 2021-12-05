@@ -12,6 +12,11 @@ MongoClient.connect(process.env.REACT_APP_MONGODB_URI || process.env.MONGOLAB_UR
     db = client.db('mybadbank');
     return db;
 });
+export const findByEmail = (email) => {
+    return db.collection('users')
+        .find({email: {$eq: email}})
+        .toArray();
+}
 
 export const findUser = (name, email) => {
     return db.collection('users')

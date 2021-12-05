@@ -1,4 +1,4 @@
-import { findUser, create, update } from '../DAL.js';
+import { findByEmail, findUser, create, update } from '../DAL.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
@@ -21,12 +21,26 @@ export const createUser =  async (req, res) => {
 
 export const login = async (req, res) => {
     const {name, email, password} = req.body;
+    console.log("name",name, email);
     try { 
+        if (name === undefined || null) {
+            try {
+                console.log("namepasscheck");
+                const user = await findByEmail(email);
+                if (user.length === 0) return res.status(404).json({message: "User does not exist"});
+                const token = jwt.sign({ email: user[0].email, id: user[0]._id}, process.env.REACT_APP_USER_TOKEN_SECRET) 
+                return res.status(200).json({ user, token });
+            } catch (err) {
+                res.status(500).json({message: "Something went wrong..."});
+                console.log(err);
+            }
+        }
         const user = await findUser(name, email);
+        console.log("othercheck")
         if (user.length === 0) return res.status(404).json({message: "User does not exist"});
         const correctPassword = await bcrypt.compare(password, user[0].password);
         if (!correctPassword) return res.status(400).json({message: "Incorrect password"});
-        const token = jwt.sign({ email: user[0].email, id: user[0]._id}, process.env.REACT_APP_USER_TOKEN_SECRET) //{expiresIn: "1h"}
+        const token = jwt.sign({ email: user[0].email, id: user[0]._id}, process.env.REACT_APP_USER_TOKEN_SECRET) 
         res.status(200).json({ user, token });
     } catch (err) {
         res.status(500).json({message: "Something went wrong..."});
@@ -52,11 +66,3 @@ export const changeBalance = async (req, res) => {
         console.log(err);
     }
 };
-
-// export const findUpdate = (req,_) => {
-//     let { id } = req.body;
-//     console.log("findUpdatefired", id);
-//     return db.collection('users')
-//              .find({"_id": new mongo.ObjectId(id) })
-//              .toArray()
-// }

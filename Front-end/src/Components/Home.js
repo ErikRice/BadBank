@@ -8,7 +8,7 @@ function Home() {
         bgcolor="primary"
         header="Bad Bank"
         title="Welcome!"
-        text="Start By Creating an Account"
+        text="Start By Creating an Account or Logging In"
         body={
           <img
             src={Bank}

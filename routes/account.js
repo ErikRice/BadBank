@@ -9,6 +9,7 @@ router.post('/create', createUser);
 
 router.post('/login', login);
 
-router.put('/update', userAuth, changeBalance); // insert userAuth middleware
+router.put('/update', userAuth, changeBalance);
+
 
 export default router;

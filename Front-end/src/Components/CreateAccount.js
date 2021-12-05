@@ -38,7 +38,7 @@ function CreateAccount() {
     const user = { name, email, password };
     (async () => {
       try {
-      const response = await fetch("/account/create", {
+      const response = await fetch("http://localhost:3080/account/create", {
         method: "POST",
         mode: "cors",
         headers: {

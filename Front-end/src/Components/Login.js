@@ -1,17 +1,22 @@
 import Card from './Card.js';
 import { useState } from 'react';
+import LoginButton from './AuthLogin.js'
+
 
 
 function Login({
   handleLogin,
   handleLogout,
   status,
-  loginScreen
+  loginScreen,
+  handleAuthUser
 }) {
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  
+
 
   return (
     <Card
@@ -62,12 +67,13 @@ function Login({
           >
             Login
           </button>
+          <LoginButton handleAuthUser={handleAuthUser}/>
       </>
         ) : (
           <div className="text-center">
             <h4>{status}</h4>
             <h6>You have successfully logged in!</h6>
-            <button type="submit" className="form-control" id="Logout Button" onClick={() => { setName(""); setEmail(""); setPassword(""); handleLogout()}}>Logout?</button>
+              <button type="submit" className="form-control" id="Logout Button" onClick={() => { window.location.replace("/"); setName(""); setEmail(""); setPassword(""); handleLogout()}}>Logout?</button>
           </div>
         )
       }
@@ -75,5 +81,4 @@ function Login({
   );
 }
 
-//install ternary operator to switch to Create Account Component (which is written in CreateAccount.js)
 export default Login;

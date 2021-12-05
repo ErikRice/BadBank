@@ -5,8 +5,9 @@ import Login from "./Components/Login.js";
 import Deposit from "./Components/Deposit.js";
 import Withdraw from "./Components/Withdraw.js";
 import SessionData from "./Components/SessionData.js";
+import { useAuth0 } from '@auth0/auth0-react'
 import { UserContext } from "./Components/Context.js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 
@@ -23,10 +24,43 @@ function App() {
   const [show, setShow] = useState(true);
 
   //set some kind of timeout after certain period of inactivity to log user out?
-
+  const { isAuthenticated, error, user, logout } = useAuth0();
   //sets the state of the loggin user
 
-  function loggedInUser(user) {
+
+  useEffect(()=>{
+    if (error) {
+      console.log(error)
+    }
+  
+    if (isAuthenticated && user) {
+      console.log("user",user);
+      (async () => {
+        try {
+          const response = await fetch("http://localhost:3080/account/login", {
+            method: "POST",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email: user.email }),
+          });
+          const authUser = await response.json();
+          if (authUser.message) {
+            setStatus(authUser.message);
+            setTimeout(() => setStatus(""), 3000);
+          }
+          return [setLoggedIn([authUser.user[0], authUser.token]), setLoginScreen(false)];
+        } catch (err) {
+          console.log(err);
+        }
+      })();
+    };
+  },[isAuthenticated, error, user])
+  
+
+
+  const loggedInUser = (user) => {
     setLoggedIn(user);
   }
 
@@ -34,10 +68,11 @@ function App() {
 
   const checkForUser = (obj) => {
     for (const key in obj) {
-      if (obj.hasOwnProperty(key)) return false;
+      if (obj.hasOwnProperty(key))
+        return false;
     }
     return true;
-  };
+  }
 
   const ctxtCreate = (user, transaction, string) => {
     const { name, balance } = user;
@@ -75,7 +110,7 @@ function App() {
     }
     (async () => {
       try {
-        const response = await fetch("/account/login", {
+        const response = await fetch("http://localhost:3080/account/login", {
           method: "POST",
           mode: "cors",
           headers: {
@@ -98,12 +133,13 @@ function App() {
   //for Logout
 
   const handleLogout = () => {
-    setLoginScreen(true);
-    loggedInUser("");
-    setCtxt([]);
-    setStatus("You've successfully logged out");
-    setTimeout(() => setStatus(""), 3000);
+      logout({ returnTo: window.location.origin })
+      loggedInUser("");
+      setStatus("You've successfully logged out");
+      setTimeout(() => setStatus(""), 3000);
+      setLoginScreen(true);
   };
+  
 
   //Deposit
 
@@ -120,7 +156,7 @@ function App() {
     let transaction = Number(deposit);
     (async () => {
       try {
-        const response = await fetch("/account/update", {
+        const response = await fetch("http://localhost:3080/account/update", {
           method: "PUT",
           mode: "cors",
           headers: {
@@ -165,7 +201,7 @@ function App() {
     let transaction = Number(withdraw) * -1;
     (async () => {
       try {
-        const response = await fetch("/account/update", {
+        const response = await fetch("http://localhost:3080/account/update", {
           method: "PUT",
           mode: "cors",
           headers: {
@@ -216,6 +252,7 @@ function App() {
                 status={status}
                 loginScreen={loginScreen}
                 setLoginScreen={setLoginScreen}
+                
               />
             }
           />
