@@ -125,11 +125,11 @@ function App() {
   //for Logout
 
   const handleLogout = () => {
-      logout({ returnTo: window.location.origin })
       setLoggedIn("");
       setStatus("You've successfully logged out");
       setTimeout(() => setStatus(""), 3000);
       setLoginScreen(true);
+      logout({ returnTo: window.location.origin })
   };
   
 
