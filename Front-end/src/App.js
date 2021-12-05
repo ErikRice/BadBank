@@ -56,12 +56,6 @@ function App() {
       })();
     };
   },[isAuthenticated, error, user])
-  
-
-
-  const loggedInUser = (user) => {
-    setLoggedIn(user);
-  }
 
   //callback for handleLogin, addToAccount, and subtractFromAccount to check for an empty object (returns a boolean)
 
@@ -108,7 +102,7 @@ function App() {
     }
     (async () => {
       try {
-        const response = await fetch("/account/login", {
+        const response = await fetch("http://localhost:3080/account/login", {
           method: "POST",
           mode: "cors",
           headers: {
@@ -132,7 +126,7 @@ function App() {
 
   const handleLogout = () => {
       logout({ returnTo: window.location.origin })
-      loggedInUser("");
+      setLoggedIn("");
       setStatus("You've successfully logged out");
       setTimeout(() => setStatus(""), 3000);
       setLoginScreen(true);
@@ -233,7 +227,7 @@ function App() {
       <NavBar loginScreen={loginScreen} loggedIn={loggedIn} />
       <UserContext.Provider value={{ ctxt, setCtxt }}>
         <Routes>
-          <Route exact path="/" element={<Home />} />
+          <Route exact path="/" element={<Home loggedIn={loggedIn}/>} />
           <Route path="/createaccount" element={<CreateAccount />} />
           <Route
             path="/login"

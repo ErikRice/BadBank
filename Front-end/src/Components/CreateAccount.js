@@ -15,6 +15,16 @@ function CreateAccount() {
     setShow(true);
   };
 
+  const showPass = () => {
+    const passwordInput = document.querySelector('#createPassword');
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+    } else {
+      passwordInput.type = "password";
+    }
+
+  }
+
   //adds an account to the ctxt array
 
   const handleCreate = () => {
@@ -73,7 +83,7 @@ function CreateAccount() {
             <input
               type="name"
               className="form-control"
-              id="loginName"
+              id="createName"
               placeholder="Enter Account Name..."
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -84,7 +94,7 @@ function CreateAccount() {
             <input
               type="email"
               className="form-control"
-              id="loginEmail"
+              id="createEmail"
               placeholder="Enter Account Email..."
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -95,11 +105,12 @@ function CreateAccount() {
             <input
               type="password"
               className="form-control"
-              id="loginPassword"
+              id="createPassword"
               placeholder="Enter Account Password..."
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            <input type="checkbox" onClick={showPass}/><h6 style={{display: "inline-block", paddingLeft: "5px" }}>Show Password</h6>
             <h6 id="error">{status}</h6>
             <br />
             <button

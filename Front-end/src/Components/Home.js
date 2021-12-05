@@ -7,8 +7,8 @@ function Home() {
       <Card
         bgcolor="primary"
         header="Bad Bank"
-        title="Welcome!"
-        text="Start By Creating an Account or Logging In"
+        title={"Welcome!"}
+        text={"Start By Creating an Account or Logging In"}
         body={
           <img
             src={Bank}

@@ -16,7 +16,14 @@ function Login({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
-
+  const showPass = () => {
+    const passwordInput = document.querySelector('#loginPassword');
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+    } else {
+      passwordInput.type = "password";
+    }
+  }
 
   return (
     <Card
@@ -56,6 +63,7 @@ function Login({
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        <input type="checkbox" onClick={showPass}/><h6 style={{display: "inline-block", paddingLeft: "5px" }}>Show Password</h6>
         <h6 id="error">{status}</h6>
         <br />
           <button
