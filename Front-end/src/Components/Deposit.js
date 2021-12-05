@@ -27,7 +27,7 @@ function Deposit({ deposit, setDeposit, addToAccount, loggedIn, show }) {
                 id="submit"
                 className="btn btn-light"
                 onClick={addToAccount}
-                disabled={!deposit}
+                disabled={!deposit || (deposit <= 0)}
               >
                 Deposit
               </button>

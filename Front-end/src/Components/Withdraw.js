@@ -33,7 +33,7 @@ function Withdraw({
               id="submit"
               className="btn btn-light"
               onClick={subtractFromAccount}
-              disabled={!withdraw}
+              disabled={!withdraw || (withdraw <= 0)}
             >
               Withdraw
             </button>

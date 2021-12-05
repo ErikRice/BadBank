@@ -125,21 +125,17 @@ function App() {
   //for Logout
 
   const handleLogout = () => {
+      logout({ returnTo: window.location.origin })
       setLoggedIn("");
       setStatus("You've successfully logged out");
       setTimeout(() => setStatus(""), 3000);
       setLoginScreen(true);
-      logout({ returnTo: window.location.origin })
   };
   
 
   //Deposit
 
   const addToAccount = () => {
-    if (Number(deposit) <= 0) {
-      alert(`You can't deposit a negative number`);
-      return;
-    }
     if (isNaN(deposit)) {
       alert("Deposited amount needs to be a number");
       return;
@@ -179,16 +175,14 @@ function App() {
   //Withdraw
 
   const subtractFromAccount = () => {
-    if (Number(withdraw) <= 0) return;
     if (isNaN(withdraw)) {
       alert("Withdrawn amount needs to be a number");
       return;
     }
-    if (Number(withdraw) > loggedIn.balance)
-      alert(
-        "Overdraft Warning: You have withdrawn more than your account balance!"
-      );
-
+    if (Number(withdraw) > loggedIn[0].balance) {
+      setStatus("***Overdraft Alert: You have withdrawn more than your account balance!***")
+      setTimeout(setStatus(""), 3000);
+    }
     if (checkForUser(loggedIn)) return;
     let transaction = Number(withdraw) * -1;
     (async () => {
@@ -269,6 +263,7 @@ function App() {
                 subtractFromAccount={subtractFromAccount}
                 loggedIn={loggedIn}
                 show={show}
+                status={status}
               />
             }
           />
