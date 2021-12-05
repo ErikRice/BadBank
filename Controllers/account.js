@@ -21,11 +21,9 @@ export const createUser =  async (req, res) => {
 
 export const login = async (req, res) => {
     const {name, email, password} = req.body;
-    console.log("name",name, email);
     try { 
         if (name === undefined || null) {
             try {
-                console.log("namepasscheck");
                 const user = await findByEmail(email);
                 if (user.length === 0) return res.status(404).json({message: "User does not exist"});
                 const token = jwt.sign({ email: user[0].email, id: user[0]._id}, process.env.REACT_APP_USER_TOKEN_SECRET) 
@@ -36,7 +34,6 @@ export const login = async (req, res) => {
             }
         }
         const user = await findUser(name, email);
-        console.log("othercheck")
         if (user.length === 0) return res.status(404).json({message: "User does not exist"});
         const correctPassword = await bcrypt.compare(password, user[0].password);
         if (!correctPassword) return res.status(400).json({message: "Incorrect password"});
@@ -51,12 +48,9 @@ export const login = async (req, res) => {
 export const changeBalance = async (req, res) => {
 
     try {
-            if (!req.user.id) {res.status(404).json({message: "Unauthenticated"})}
-        // if (req.user.id) {
-            let id = req.user.id;
-            let transaction = req.user.transaction;
-            // return [id , transaction];
-        // };
+        if (!req.user.id) {res.status(404).json({message: "Unauthenticated"})}
+        let id = req.user.id;
+        let transaction = req.user.transaction;
         const user = await update(id, transaction);
         if (!user.value) return res.status(404).json({message: "User does not exist"});
         res.status(200).json({ user });
